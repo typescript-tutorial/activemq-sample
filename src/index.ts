@@ -37,8 +37,8 @@ connectToDb(`${mongoURI}`, `${mongoDB}`).then(async(db) => {
     destinationName: amqDestinationName,
     subscriptionName: amqDestinationName,
   }
-  const amqConnection = new AmqConnection();
-  const client = await amqConnection.connect(amqhost, config.port, amqUsername, amqPassword);
+  const amqConnection = new AmqConnection(config);
+  const client = await amqConnection.connect();
   const ctx = createContext(db, client, config);
   ctx.read(ctx.handle);
   route(app, ctx);

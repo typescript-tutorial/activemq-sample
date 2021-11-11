@@ -7,6 +7,7 @@ import {ApplicationContext} from './context';
 import { HealthController } from './controllers/HealthController';
 import { AckMode, AmqConsumer, AmqProducer, Config } from './services/activemq';
 import { Client } from 'stompit';
+import { ActivemqChecker } from './services/activemq/AmqChecker';
 
 const retries = [5000, 10000, 20000];
 
@@ -34,6 +35,8 @@ const user: Attributes = {
 };
 
 export function createContext(db: Db, client: Client, config: Config): ApplicationContext {
+  const atmqChecker = new ActivemqChecker(config);
+  const healthController = new HealthController([atmqChecker]);
   const writer = new MongoInserter(db.collection('users'), 'id');
   const retryWriter = new RetryWriter(writer.write, retries, writeUser, log);
   const errorHandler = new ErrorHandler(log);
@@ -42,7 +45,7 @@ export function createContext(db: Db, client: Client, config: Config): Applicati
   const producer = new AmqProducer<User>(client, config.destinationName, config.subscriptionName);
   const retryService = new RetryService<User, boolean>(producer.produce, log, log);
   const handler = new Handler<User, boolean>(retryWriter.write, validator.validate , retries, errorHandler.error, log, log, retryService.retry, 3, 'retry');
-  const ctx: ApplicationContext = { handle: handler.handle, read: consumer.consume };
+  const ctx: ApplicationContext = { handle: handler.handle, read: consumer.consume, healthController };
   return ctx;
 }
 
