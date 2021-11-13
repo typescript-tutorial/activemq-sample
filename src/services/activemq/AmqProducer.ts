@@ -2,7 +2,7 @@ import { StringMap } from 'mq-one';
 import Client = require('stompit/lib/Client');
 import { Message } from './model';
 
-export class AmqProducer<T> {
+export class ActiveMQSender<T> {
   constructor(
     private client: Client,
     private destinationName: string,

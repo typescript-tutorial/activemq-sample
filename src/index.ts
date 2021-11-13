@@ -5,7 +5,7 @@ import http from 'http';
 import { connectToDb } from 'mongodb-extension';
 import { createContext } from './init';
 import { route } from './route';
-import { AmqConnection, Config } from './services/activemq';
+import { ActiveMQConnection, Config } from './services/activemq';
 // import { printData, retry } from './services/pubsub/retry';
 
 dotenv.config();
@@ -37,7 +37,7 @@ connectToDb(`${mongoURI}`, `${mongoDB}`).then(async (db) => {
     destinationName: amqDestinationName,
     subscriptionName: amqDestinationName,
   };
-  const amqConnection = new AmqConnection(config);
+  const amqConnection = new ActiveMQConnection(config);
   const client = await amqConnection.connect();
   const ctx = createContext(db, client, config);
   ctx.read(ctx.handle);

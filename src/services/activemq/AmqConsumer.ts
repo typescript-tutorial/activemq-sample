@@ -1,9 +1,10 @@
 import { StringMap, toString } from 'mq-one';
 import Client = require('stompit/lib/Client');
-import { AckMode } from './AckMode';
 import { Message } from './model';
 
-export class AmqConsumer<T> {
+export type AckMode = 'auto' | 'client' | 'client-individual'; // Client does not send ACK, Client sends ACK/NACK, Client sends ACK/NACK for individual messages
+
+export class ActiveMQSubscriber<T> {
   private destinationName: string;
   private subscriptionName: string;
   retryCountName: string;
@@ -73,7 +74,7 @@ export class AmqConsumer<T> {
             this.logError('Fail to consume message: ' + toString(e));
           }
         }
-        if (this.ackOnConsume && this.ackMode !== AckMode.AckAuto) {
+        if (this.ackOnConsume && this.ackMode !== 'auto') {
           this.client.ack(message);
         }
       });

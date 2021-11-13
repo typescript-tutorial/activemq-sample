@@ -15,7 +15,7 @@ export interface CheckResult {
   details: any;
 }
 
-export class ActivemqChecker {
+export class ActiveMQChecker {
   constructor(public config: Config, public service?: string, private timeout?: number) {
     this.check = this.check.bind(this);
     this.name = this.name.bind(this);

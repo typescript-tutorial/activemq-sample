@@ -2,7 +2,7 @@ import * as stompit from 'stompit';
 import * as Client from 'stompit/lib/Client';
 import { Config } from '.';
 
-export class AmqConnection {
+export class ActiveMQConnection {
   constructor(private config: Config) {
     this.connect = this.connect.bind(this);
   }
