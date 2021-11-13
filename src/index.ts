@@ -3,8 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
 import { connectToDb } from 'mongodb-extension';
-import { createContext } from './init';
-import { route } from './route';
+import { createContext } from './context';
 import { ActiveMQConnection, Config } from './services/activemq';
 // import { printData, retry } from './services/pubsub/retry';
 
@@ -41,7 +40,8 @@ connectToDb(`${mongoURI}`, `${mongoDB}`).then(async (db) => {
   const client = await amqConnection.connect();
   const ctx = createContext(db, client, config);
   ctx.read(ctx.handle);
-  route(app, ctx);
+
+  app.get('/health', ctx.health.check);
   http.createServer(app).listen(port, () => {
     console.log('Start server at port ' + port);
   });
