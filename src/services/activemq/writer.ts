@@ -2,7 +2,7 @@ import { StringMap } from 'mq-one';
 import Client = require('stompit/lib/Client');
 import { Message } from './message';
 
-export class ActiveMQSender<T> {
+export class ActiveMQWriter<T> {
   constructor(
     private client: Client,
     private destinationName: string,
@@ -11,10 +11,10 @@ export class ActiveMQSender<T> {
     private prefix?: string,
     private log?: (msg: any) => void
   ) {
-    this.produce = this.produce.bind(this);
+    this.write = this.write.bind(this);
   }
 
-  produce(data: T, attributes?: StringMap): Promise<boolean> {
+  write(data: T, attributes?: StringMap): Promise<boolean> {
     const prefix = this.prefix && this.prefix.length > 0 ? this.prefix : '/';
     const sendHeaders = {
       'destination': `${this.destinationName}${prefix}${this.subscriptionName}`,

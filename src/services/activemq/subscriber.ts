@@ -26,10 +26,10 @@ export class ActiveMQSubscriber<T> {
     } else {
       this.retryCountName = retryCountName;
     }
-    this.consume = this.consume.bind(this);
+    this.subscribe = this.subscribe.bind(this);
   }
 
-  consume(handle: (data: T, attributes?: StringMap) => Promise<number>): void {
+  subscribe(handle: (data: T, attributes?: StringMap) => Promise<number>): void {
     const prefix = this.prefix && this.prefix.length > 0 ? this.prefix : '/';
     const subscribeHeaders = {
       'destination': `${this.destinationName}${prefix}${this.subscriptionName}`,
