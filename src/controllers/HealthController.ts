@@ -1,6 +1,6 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
+import { HealthChecker } from '../services/activemq';
 import { check } from '../services/activemq/health';
-import { HealthChecker } from '../services/activemq/AmqChecker';
 
 export class HealthController {
   constructor(protected checkers: HealthChecker[]) {

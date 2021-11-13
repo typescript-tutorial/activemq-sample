@@ -7,7 +7,7 @@ import { ApplicationContext } from './context';
 import { HealthController } from './controllers/HealthController';
 import { User } from './models/User';
 import { ActiveMQSender, ActiveMQSubscriber, Config } from './services/activemq';
-import { ActiveMQChecker } from './services/activemq/AmqChecker';
+import { ActiveMQChecker } from './services/activemq';
 
 const retries = [5000, 10000, 20000];
 

@@ -1,5 +1,5 @@
-import { checkConnect } from './AmqConnection';
 import { Config } from './config';
+import { check } from './connection';
 
 export interface AnyMap {
   [key: string]: any;
@@ -10,12 +10,7 @@ export interface HealthChecker {
   check(): Promise<AnyMap>;
 }
 
-export interface CheckResult {
-  status: string;
-  details: any;
-}
-
-export class ActiveMQChecker {
+export class ActiveMQChecker implements HealthChecker {
   constructor(public config: Config, public service?: string, private timeout?: number) {
     this.check = this.check.bind(this);
     this.name = this.name.bind(this);
@@ -25,7 +20,7 @@ export class ActiveMQChecker {
     const obj = {} as AnyMap;
     const promise = new Promise<any>(async (resolve, reject) => {
       try {
-        await checkConnect(this.config);
+        await check(this.config);
         resolve(obj);
       } catch (err) {
         reject(`Database down!`);

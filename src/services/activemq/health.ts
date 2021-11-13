@@ -1,5 +1,8 @@
-import { HealthChecker } from './AmqChecker';
-
+interface HealthChecker {
+  name(): string;
+  build(data: AnyMap, error: any): AnyMap;
+  check(): Promise<AnyMap>;
+}
 export type HealthStatus = 'UP' | 'DOWN';
 export interface HealthMap {
   [key: string]: Health;

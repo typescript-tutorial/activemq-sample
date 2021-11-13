@@ -1,6 +1,6 @@
 import { StringMap, toString } from 'mq-one';
 import Client = require('stompit/lib/Client');
-import { Message } from './model';
+import { Message } from './message';
 
 export type AckMode = 'auto' | 'client' | 'client-individual'; // Client does not send ACK, Client sends ACK/NACK, Client sends ACK/NACK for individual messages
 

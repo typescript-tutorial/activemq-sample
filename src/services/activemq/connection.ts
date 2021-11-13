@@ -1,6 +1,6 @@
 import * as stompit from 'stompit';
 import * as Client from 'stompit/lib/Client';
-import { Config } from '.';
+import { Config } from './config';
 
 export class ActiveMQConnection {
   constructor(private config: Config) {
@@ -46,7 +46,7 @@ export class ActiveMQConnection {
   }
 }
 
-export function checkConnect(config: Config): Promise<void> {
+export function check(config: Config): Promise<void> {
   const connectOptions = {
     'host': config.host,
     'port': config.port,
