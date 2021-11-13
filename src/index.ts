@@ -1,10 +1,10 @@
-import {json} from 'body-parser';
+import { json } from 'body-parser';
 import dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
-import {createContext} from './init';
-import {route} from './route';
 import { connectToDb } from 'mongodb-extension';
+import { createContext } from './init';
+import { route } from './route';
 import { AmqConnection, Config } from './services/activemq';
 // import { printData, retry } from './services/pubsub/retry';
 
@@ -25,18 +25,18 @@ const amqSubscriptionName = process.env.AMQSUBSCRIPTIONNAME;
 
 app.use(json());
 
-connectToDb(`${mongoURI}`, `${mongoDB}`).then(async(db) => {
-  if(!amqhost || !amqport || !amqUsername || !amqPassword || !amqDestinationName || !amqSubscriptionName) {
-    throw new Error("config wrong!");
+connectToDb(`${mongoURI}`, `${mongoDB}`).then(async (db) => {
+  if (!amqhost || !amqport || !amqUsername || !amqPassword || !amqDestinationName || !amqSubscriptionName) {
+    throw new Error('config wrong!');
   }
   const config: Config = {
     host: amqhost,
-    port:Number(amqport),
+    port: Number(amqport),
     username: amqUsername,
     password: amqPassword,
     destinationName: amqDestinationName,
     subscriptionName: amqDestinationName,
-  }
+  };
   const amqConnection = new AmqConnection(config);
   const client = await amqConnection.connect();
   const ctx = createContext(db, client, config);

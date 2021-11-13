@@ -1,4 +1,4 @@
-import { HealthChecker } from "./AmqChecker";
+import { HealthChecker } from './AmqChecker';
 
 export type HealthStatus = 'UP' | 'DOWN';
 export interface HealthMap {
@@ -27,7 +27,7 @@ export async function check(checkers: HealthChecker[]): Promise<Health> {
       if (r && Object.keys(r).length > 0) {
         sub.data = r;
       }
-      if(p.details) {
+      if (p.details) {
         p.details[checker.name()] = sub;
       }
       if (count >= total) {
@@ -39,7 +39,7 @@ export async function check(checkers: HealthChecker[]): Promise<Health> {
       sub.status = 'DOWN';
       p.status = 'DOWN';
       sub.data = checker.build({} as AnyMap, err);
-      if(p.details) {
+      if (p.details) {
         p.details[checker.name()] = sub;
       }
       if (count >= total) {

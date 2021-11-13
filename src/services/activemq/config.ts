@@ -1,4 +1,4 @@
-import { ConnectFailoverOptions } from "stompit/lib/ConnectFailover";
+import { ConnectFailoverOptions } from 'stompit/lib/ConnectFailover';
 
 export interface Config {
   host: string;
@@ -8,5 +8,5 @@ export interface Config {
   destinationName: string;
   subscriptionName: string;
   heartBeat?: string;
-  reconnectOptions?: ConnectFailoverOptions
+  reconnectOptions?: ConnectFailoverOptions;
 }

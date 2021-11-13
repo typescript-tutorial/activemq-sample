@@ -6,7 +6,6 @@ export class AmqConnection {
   constructor(private config: Config) {
     this.connect = this.connect.bind(this);
   }
-
   connect(): Promise<Client> {
     const connectOptions = {
       'host': this.config.host,
@@ -23,7 +22,7 @@ export class AmqConnection {
       maxReconnectDelay: 60000, // 1 minute
       reconnectDelayExponent: 2
     };
-    const reconnectOptionsMerged = {...reconnectOptionsDefault, ...reconnectOptionsDefault};
+    const reconnectOptionsMerged = { ...reconnectOptionsDefault, ...reconnectOptionsDefault };
     return new Promise<Client>((resolve, reject) => {
       const clientConnect = new stompit.ConnectFailover([connectOptions], reconnectOptionsMerged);
       clientConnect.on('connect', () => {
@@ -47,7 +46,7 @@ export class AmqConnection {
   }
 }
 
-export function checkConnect (config: Config): Promise<void> {
+export function checkConnect(config: Config): Promise<void> {
   const connectOptions = {
     'host': config.host,
     'port': config.port,
@@ -63,7 +62,7 @@ export function checkConnect (config: Config): Promise<void> {
     maxReconnectDelay: 60000, // 1 minute
     reconnectDelayExponent: 2
   };
-  const reconnectOptionsMerged = {...reconnectOptionsDefault, ...reconnectOptionsDefault};
+  const reconnectOptionsMerged = { ...reconnectOptionsDefault, ...reconnectOptionsDefault };
   return new Promise((resolve, reject) => {
     const clientConnect = new stompit.ConnectFailover([connectOptions], reconnectOptionsMerged);
     clientConnect.connect((error, client) => {
@@ -75,5 +74,5 @@ export function checkConnect (config: Config): Promise<void> {
       });
       resolve();
     });
-  })
+  });
 }

@@ -1,22 +1,22 @@
 import { StringMap, toString } from 'mq-one';
-import { Message } from './model';
 import Client = require('stompit/lib/Client');
 import {AckMode} from './enum/AckMode';
+import { Message } from './model';
 
-export class AmqConsumer<T>{
+export class AmqConsumer<T> {
   private destinationName: string;
   private subscriptionName: string;
   retryCountName: string;
   constructor(
-    private client: Client, 
-    destinationName: string, 
-    subscriptionName: string, 
-    private ackMode: AckMode, 
-    private ackOnConsume: boolean, 
+    private client: Client,
+    destinationName: string,
+    subscriptionName: string,
+    private ackMode: AckMode,
+    private ackOnConsume: boolean,
     private prefix?: string,
     retryCountName?: string,
     public logError?: (msg: any) => void,
-    public logInfo?: (msg: any) => void, 
+    public logInfo?: (msg: any) => void,
   ) {
     this.destinationName = destinationName;
     this.subscriptionName = subscriptionName;
@@ -28,7 +28,7 @@ export class AmqConsumer<T>{
     this.consume = this.consume.bind(this);
   }
 
-  consume(handle: (data: T, attributes?: StringMap) => Promise<number>) : void {
+  consume(handle: (data: T, attributes?: StringMap) => Promise<number>): void {
     const prefix = this.prefix && this.prefix.length > 0 ? this.prefix : '/';
     const subscribeHeaders = {
       'destination': `${this.destinationName}${prefix}${this.subscriptionName}`,
@@ -51,25 +51,25 @@ export class AmqConsumer<T>{
         if (this.logInfo) {
           this.logInfo('received message: ' + body);
         }
-        let messageContent: Message<T> = {};
+        const messageContent: Message<T> = {};
         try {
-          if(body) {
+          if (body) {
             if (JSON.parse(body)[this.retryCountName]) {
               messageContent.data =  JSON.parse(body).data;
               messageContent.attributes = JSON.parse(body)[this.retryCountName];
             } else {
-              let a: StringMap = {};
+              const a: StringMap = {};
               a[this.retryCountName] = '0';
               messageContent.data =  JSON.parse(body);
               messageContent.attributes = a;
             }
-            if(!messageContent.data) {
-              throw new Error ("message content is empty!");
+            if (!messageContent.data) {
+              throw new Error ('message content is empty!');
             }
             handle(messageContent.data, messageContent.attributes);
           }
         } catch (e) {
-          if(this.logError) {
+          if (this.logError) {
             this.logError('Fail to consume message: ' + toString(e));
           }
         }

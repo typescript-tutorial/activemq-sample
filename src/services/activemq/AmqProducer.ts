@@ -4,12 +4,12 @@ import { Message } from './model';
 
 export class AmqProducer<T> {
   constructor(
-    private client: Client, 
-    private destinationName: string, 
-    private subscriptionName: string, 
-    private contentType?: string, 
+    private client: Client,
+    private destinationName: string,
+    private subscriptionName: string,
+    private contentType?: string,
     private prefix?: string,
-    private log?: (msg: any)=> void
+    private log?: (msg: any) => void
   ) {
     this.produce = this.produce.bind(this);
   }
@@ -23,10 +23,10 @@ export class AmqProducer<T> {
     const message: Message<T> = {
       data,
       attributes
-    }
+    };
     return new Promise((resolve, reject) => {
       const frame = this.client.send(sendHeaders);
-      if(this.log){
+      if (this.log) {
         this.log('produce send data : ' + JSON.stringify(message));
       }
       const result = frame.write(JSON.stringify(message));
@@ -39,5 +39,4 @@ export class AmqProducer<T> {
       resolve(result);
     });
   }
-
 }
