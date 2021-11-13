@@ -21,7 +21,7 @@ export async function check(checkers: HealthChecker[]): Promise<Health> {
   const total = checkers.length - 1;
   let count = 0;
   for (const checker of checkers) {
-    const sub: Health = {status: 'UP'};
+    const sub: Health = { status: 'UP' };
     try {
       const r = await checker.check();
       if (r && Object.keys(r).length > 0) {

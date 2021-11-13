@@ -1,6 +1,6 @@
 import { StringMap, toString } from 'mq-one';
 import Client = require('stompit/lib/Client');
-import {AckMode} from './enum/AckMode';
+import { AckMode } from './AckMode';
 import { Message } from './model';
 
 export class AmqConsumer<T> {
@@ -45,7 +45,7 @@ export class AmqConsumer<T> {
       }
       message.readString('utf-8', (errorRead, body) => {
         if (errorRead && this.logInfo) {
-            this.logInfo('read message error ' + errorRead.message);
+          this.logInfo('read message error ' + errorRead.message);
           return;
         }
         if (this.logInfo) {
@@ -55,16 +55,16 @@ export class AmqConsumer<T> {
         try {
           if (body) {
             if (JSON.parse(body)[this.retryCountName]) {
-              messageContent.data =  JSON.parse(body).data;
+              messageContent.data = JSON.parse(body).data;
               messageContent.attributes = JSON.parse(body)[this.retryCountName];
             } else {
               const a: StringMap = {};
               a[this.retryCountName] = '0';
-              messageContent.data =  JSON.parse(body);
+              messageContent.data = JSON.parse(body);
               messageContent.attributes = a;
             }
             if (!messageContent.data) {
-              throw new Error ('message content is empty!');
+              throw new Error('message content is empty!');
             }
             handle(messageContent.data, messageContent.attributes);
           }
