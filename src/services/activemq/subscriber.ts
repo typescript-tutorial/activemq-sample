@@ -32,7 +32,7 @@ export class ActiveMQSubscriber<T> {
   subscribe(handle: (data: T, attributes?: StringMap) => Promise<number>): void {
     const prefix = this.prefix && this.prefix.length > 0 ? this.prefix : '/';
     const subscribeHeaders = {
-      'destination': `${this.destinationName}${prefix}${this.subscriptionName}`,
+      'destination': `${this.destinationName}${prefix}${this.subscriptionName}`,   
       'ack': this.ackMode,
       'subscription-type': 'ANYCAST'
     };

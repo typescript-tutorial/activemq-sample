@@ -42,6 +42,7 @@ export const user: Attributes = {
 export interface ApplicationContext {
   handle: (data: User, header?: StringMap) => Promise<number>;
   read: (handle: (data: User, header?: StringMap) => Promise<number>) => void;
+  write: (data: User) => Promise<boolean>;
   health: HealthController;
 }
 
@@ -56,7 +57,7 @@ export function createContext(db: Db, client: Client, config: Config): Applicati
   const writer = new ActiveMQWriter<User>(client, config.destinationName, config.subscriptionName);
   const retryService = new RetryService<User, boolean>(writer.write, log, log);
   const handler = new Handler<User, boolean>(retryWriter.write, validator.validate, retries, errorHandler.error, log, log, retryService.retry, 3, 'retry');
-  const ctx: ApplicationContext = { handle: handler.handle, read: subscriber.subscribe, health };
+  const ctx: ApplicationContext = { handle: handler.handle, read: subscriber.subscribe, health, write: writer.write };
   return ctx;
 }
 export function log(msg: any): void {

@@ -27,16 +27,19 @@ export class ActiveMQWriter<T> {
     return new Promise((resolve, reject) => {
       const frame = this.client.send(sendHeaders);
       if (this.log) {
-        this.log('produce send data : ' + JSON.stringify(message));
+        this.log('produce send data : ' + JSON.stringify(message.data));
       }
-      const result = frame.write(JSON.stringify(message));
+      const result = frame.write(JSON.stringify(message.data));
       frame.end((err: any) => {
         if (err) {
           console.log('Error activemq: ', err);
-          reject(err);
+          reject(err); 
         }
       });
       resolve(result);
-    });
+    })
+    
+    
+    ;
   }
 }
