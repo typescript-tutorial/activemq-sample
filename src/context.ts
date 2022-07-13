@@ -1,9 +1,9 @@
-import { HealthController } from 'express-ext';
+import { HealthController } from 'health-service';
 import { Db } from 'mongodb';
 import { MongoInserter } from 'mongodb-extension';
 import { ErrorHandler, Handler, RetryService, RetryWriter, StringMap } from 'mq-one';
 import { Client } from 'stompit';
-import { Attributes, Validator } from 'validator-x';
+import { Attributes, Validator } from 'xvalidators';
 import { ActiveMQSubscriber, ActiveMQWriter, Config } from './services/activemq';
 import { ActiveMQChecker } from './services/activemq';
 

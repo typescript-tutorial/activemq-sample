@@ -15,14 +15,14 @@
     "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-ext": "0.0.0",
+    "health-service": "^0.1.2",
     "logger-core": "^0.3.0",
     "mongodb": "^3.6.10",
     "mongodb-extension": "^0.1.4",
     "mq-one": "^0.1.1",
     "stompit": "^1.0.0",
     "ts-node": "^10.8.2",
-    "validator-x": "^0.0.10"
+    "xvalidators": "^0.0.4"
   },
   "devDependencies": {
     "@types/amqplib": "^0.8.2",
