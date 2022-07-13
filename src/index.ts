@@ -5,6 +5,7 @@ import http from 'http';
 import { connectToDb } from 'mongodb-extension';
 import { createContext } from './context';
 import { ActiveMQConnection, Config } from './services/activemq';
+// import { SendController } from './services/activemq/send';
 // import { printData, retry } from './services/pubsub/retry';
 
 dotenv.config();
@@ -42,6 +43,11 @@ connectToDb(`${mongoURI}`, `${mongoDB}`).then(async (db) => {
   ctx.read(ctx.handle);
 
   app.get('/health', ctx.health.check);
+  app.post('/send', (req, res) => {
+    ctx.handle(req.body)
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.end(JSON.stringify({message: 'message was produced'}));
+  });
   http.createServer(app).listen(port, () => {
     console.log('Start server at port ' + port);
   });
