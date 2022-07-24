@@ -1,8 +1,8 @@
-import { StringMap } from 'mq-one';
+import { StringMap } from './core';
 
-export interface Message<T> {
+export interface Message<T, R> {
   data?: T;
   id?: string;
   attributes?: StringMap;
-  raw?: any;
+  raw?: R;
 }

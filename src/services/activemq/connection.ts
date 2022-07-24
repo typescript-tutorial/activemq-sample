@@ -1,5 +1,5 @@
 import * as stompit from 'stompit';
-import * as Client from 'stompit/lib/Client';
+import Client from 'stompit/lib/Client';
 import { Config } from './config';
 
 export class ActiveMQConnection {

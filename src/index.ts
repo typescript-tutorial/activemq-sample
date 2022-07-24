@@ -1,14 +1,11 @@
-import { json } from "body-parser";
-import dotenv from "dotenv";
-import express from "express";
-import http from "http";
-import { connectToDb } from "mongodb-extension";
-import { createContext } from "./context";
-import { ActiveMQConnection, Config } from "./services/activemq";
-import { getBody } from "logger-core";
-
-// import { SendController } from './services/activemq/send';
-// import { printData, retry } from './services/pubsub/retry';
+import { json } from 'body-parser';
+import dotenv from 'dotenv';
+import express from 'express';
+import http from 'http';
+import { getBody } from 'logger-core';
+import { connectToDb } from 'mongodb-extension';
+import { createContext } from './context';
+import { ActiveMQConnection, Config } from './services/activemq';
 
 dotenv.config();
 
@@ -36,7 +33,7 @@ connectToDb(`${mongoURI}`, `${mongoDB}`).then(async (db) => {
     !amqDestinationName ||
     !amqSubscriptionName
   ) {
-    throw new Error("config wrong!");
+    throw new Error('config wrong!');
   }
   const config: Config = {
     host: amqhost,
@@ -51,26 +48,25 @@ connectToDb(`${mongoURI}`, `${mongoDB}`).then(async (db) => {
   const ctx = createContext(db, client, config);
   ctx.read(ctx.handle);
 
-  http
-    .createServer((req, res) => {
-      if (req.url === "/health") {
+  http.createServer((req, res) => {
+      if (req.url === '/health') {
         ctx.health.check(req, res);
-      } else if (req.url === "/send") {
+      } else if (req.url === '/send') {
         getBody(req).then((body: any) => {
           ctx
             .write(JSON.parse(body))
             .then(() => {
-              res.writeHead(200, { "Content-Type": "application/json" });
-              res.end(JSON.stringify({ message: "message was produced" }));
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ message: 'message was produced' }));
             })
             .catch((err) => {
-              res.writeHead(500, { "Content-Type": "application/json" });
+              res.writeHead(500, { 'Content-Type': 'application/json' });
               res.end(JSON.stringify({ error: err }));
             });
         }).catch(err => console.log(err));
       }
     })
     .listen(port, () => {
-      console.log("Start server at port " + port);
+      console.log('Start server at port ' + port);
     });
 });

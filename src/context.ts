@@ -4,7 +4,7 @@ import { MongoInserter } from 'mongodb-extension';
 import { ErrorHandler, Handler, RetryService, RetryWriter, StringMap } from 'mq-one';
 import { Client } from 'stompit';
 import { Attributes, Validator } from 'xvalidators';
-import { ActiveMQSubscriber, ActiveMQWriter, Config } from './services/activemq';
+import { Config, Subscriber, Writer } from './services/activemq';
 import { ActiveMQChecker } from './services/activemq';
 
 const retries = [5000, 10000, 20000];
@@ -53,8 +53,8 @@ export function createContext(db: Db, client: Client, config: Config): Applicati
   const retryWriter = new RetryWriter(dbwriter.write, retries, writeUser, log);
   const errorHandler = new ErrorHandler(log);
   const validator = new Validator<User>(user, true);
-  const subscriber = new ActiveMQSubscriber<User>(client, config.destinationName, config.subscriptionName, 'client-individual', true, undefined, undefined, log, log);
-  const writer = new ActiveMQWriter<User>(client, config.destinationName, config.subscriptionName);
+  const subscriber = new Subscriber<User>(client, config.destinationName, config.subscriptionName, 'client-individual', true, log, log, undefined, undefined, undefined);
+  const writer = new Writer<User>(client, config.destinationName, config.subscriptionName);
   const retryService = new RetryService<User, boolean>(writer.write, log, log);
   const handler = new Handler<User, boolean>(retryWriter.write, validator.validate, retries, errorHandler.error, log, log, retryService.retry, 3, 'retry');
   const ctx: ApplicationContext = { handle: handler.handle, read: subscriber.subscribe, health, write: writer.write };
