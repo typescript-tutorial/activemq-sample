@@ -3,38 +3,38 @@ export const config = {
   secure: false,
   template: true,
   allow: {
-    origin: "http://localhost:3000",
-    credentials: "true",
-    methods: "GET,PUT,POST,DELETE,OPTIONS,PATCH",
+    origin: 'http://localhost:3000',
+    credentials: 'true',
+    methods: 'GET,PUT,POST,DELETE,OPTIONS,PATCH',
     headers:
-      "Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+      'Access-Control-Allow-Headers, Authorization, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers',
   },
   log: {
-    level: "debug",
+    level: 'debug',
     map: {
-      time: "@timestamp",
-      msg: "message",
+      time: '@timestamp',
+      msg: 'message',
     },
     db: true,
   },
   middleware: {
     log: true,
-    skips: "health,log",
-    request: "request",
-    status: "status",
-    size: "size",
+    skips: 'health,log',
+    request: 'request',
+    status: 'status',
+    size: 'size',
   },
   db: {
-    uri: "mongodb://localhost:27017",
-    db: "masterdata2",
+    uri: 'mongodb://localhost:27017',
+    db: 'masterdata2',
   },
   amq: {
-    host: "localhost",
+    host: 'localhost',
     port: 61613,
-    username: "admin",
-    password: "admin",
-    destinationName: "topic",
-    subscriptionName: "sub-user",
+    username: 'admin',
+    password: 'admin',
+    destinationName: 'topic',
+    subscriptionName: 'sub-user',
   }
 };
 
