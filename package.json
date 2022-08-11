@@ -21,6 +21,9 @@
     "mongodb": "^3.6.10",
     "mongodb-extension": "^0.1.4",
     "mq-one": "^0.1.1",
+    "pg": "^8.7.3",
+    "pg-extension": "^0.1.8",
+    "query-core": "^0.1.25",
     "stompit": "^1.0.0",
     "ts-node": "^10.8.2",
     "xvalidators": "^0.0.4"
@@ -29,6 +32,7 @@
     "@types/amqplib": "^0.8.2",
     "@types/express": "^4.17.12",
     "@types/mongodb": "^3.6.17",
+    "@types/pg": "^8.6.5",
     "@types/stompit": "^0.26.2",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",

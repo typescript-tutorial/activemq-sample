@@ -1,28 +1,28 @@
-import { json } from 'body-parser';
-import { merge } from 'config-plus';
+import http from 'http';
 import dotenv from 'dotenv';
 import express from 'express';
-import http from 'http';
+import { json } from 'body-parser';
+import { merge } from 'config-plus';
 import { getBody } from 'logger-core';
-import { connectToDb } from 'mongodb-extension';
+import { Pool } from 'pg';
+import { PoolManager } from 'pg-extension';
+
 import { config, env } from './config';
 import { createContext } from './context';
 import { ActiveMQConnection } from './services/activemq';
 
-dotenv.config();
+async function app() {
+  dotenv.config();
+  const conf = merge(config, process.env, env, process.env.ENV);
+  
+  const app = express();
+  app.use(json());
 
-const app = express();
-const conf = merge(config, process.env, env, process.env.ENV);
-
-app.use(json());
-
-connectToDb(
-  `${conf.db.uri}`,
-  `${conf.db.db}`
-).then(async (db) => {
+  const pool = new Pool(conf.db.query);
+  const queryDB = new PoolManager(pool);
   const amqConnection = new ActiveMQConnection(conf.amq);
   const client = await amqConnection.connect();
-  const ctx = createContext(db, client, conf.amq);
+  const ctx = createContext(queryDB, client, conf.amq);
   ctx.read(ctx.handle);
 
   http.createServer((req, res) => {
@@ -45,4 +45,6 @@ connectToDb(
   }).listen(conf.port, () => {
     console.log('Start server at port ' + conf.port);
   });
-});
+}
+
+app()

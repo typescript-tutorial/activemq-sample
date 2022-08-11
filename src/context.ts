@@ -1,9 +1,10 @@
 import { HealthController } from 'health-service';
-import { Db } from 'mongodb';
-import { MongoInserter } from 'mongodb-extension';
-import { ErrorHandler, Handler, RetryService, RetryWriter, StringMap } from 'mq-one';
 import { Client } from 'stompit';
 import { Attributes, Validator } from 'xvalidators';
+import { ErrorHandler, Handler, RetryService, RetryWriter, StringMap } from 'mq-one';
+import { DB } from 'pg-extension';
+import { Repository } from 'query-core';
+
 import { Config, Subscriber, Writer } from './services/activemq';
 import { ActiveMQChecker } from './services/activemq';
 
@@ -46,11 +47,11 @@ export interface ApplicationContext {
   health: HealthController;
 }
 
-export function createContext(db: Db, client: Client, config: Config): ApplicationContext {
+export function createContext(db: DB, client: Client, config: Config): ApplicationContext {
   const atmqChecker = new ActiveMQChecker(config);
   const health = new HealthController([atmqChecker]);
-  const dbwriter = new MongoInserter(db.collection('users'), 'id');
-  const retryWriter = new RetryWriter(dbwriter.write, retries, writeUser, log);
+  const repository = new Repository<User, string>(db, 'activemq', user);
+  const retryWriter = new RetryWriter(repository.insert, retries, writeUser, log);
   const errorHandler = new ErrorHandler(log);
   const validator = new Validator<User>(user, true);
   const subscriber = new Subscriber<User>(client, config.destinationName, config.subscriptionName, 'client-individual', true, log, log, undefined, undefined, undefined);
