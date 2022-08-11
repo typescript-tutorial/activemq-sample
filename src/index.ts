@@ -18,11 +18,11 @@ async function app() {
   const app = express();
   app.use(json());
 
-  const pool = new Pool(conf.db.query);
-  const queryDB = new PoolManager(pool);
+  const pool = new Pool(conf.db);
+  const db = new PoolManager(pool);
   const amqConnection = new ActiveMQConnection(conf.amq);
   const client = await amqConnection.connect();
-  const ctx = createContext(queryDB, client, conf.amq);
+  const ctx = createContext(db, client, conf.amq);
   ctx.read(ctx.handle);
 
   http.createServer((req, res) => {
@@ -47,4 +47,4 @@ async function app() {
   });
 }
 
-app()
+app();
