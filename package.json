@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec ts-node-dev src/index.ts",
+    "start": "nodemon --exec ts-node-dev src/index",
+    "build": "webpack --config webpack.config.js",
+    "prod": "node dist/index",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint -c .eslintrc.js --ext .ts src"
   },
@@ -21,7 +23,7 @@
     "pg-extension": "^0.1.9",
     "stompit": "^1.0.0",
     "ts-node": "^10.9.1",
-    "xvalidators": "0.0.5"
+    "xvalidators": "^0.0.5"
   },
   "devDependencies": {
     "@types/amqplib": "^0.8.2",
@@ -31,9 +33,15 @@
     "@typescript-eslint/parser": "^5.33.0",
     "eslint": "^8.21.0",
     "nodemon": "^2.0.19",
+    "ts-loader": "^9.3.1",
     "ts-node-dev": "^2.0.0",
     "tslint": "5.20.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^5.74.0",
+    "webpack-bundle-analyzer": "^4.5.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.10.0"
   }
 }
